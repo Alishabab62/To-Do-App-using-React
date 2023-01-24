@@ -11,7 +11,7 @@ function handleSubmit(event){
     setValue("");
 }
     return(
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} >
             <input type="text" value={value} onChange={(e) => setValue(e.target.value)} />
             <button type="submit">Submit</button>
         </form>

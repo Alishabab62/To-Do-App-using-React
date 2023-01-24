@@ -17,6 +17,23 @@ let [tasks ,setTasks] = React.useState([]);
     };
 
 
+function removeTask(index){
+    setTasks(tasks=>{
+        const newTasks=[...tasks];
+        newTasks.splice(index,1);
+        return newTasks;
+    })
+}
+
+function updateTask(index){
+    setTasks(tasks=>{
+        const newTask=[...tasks];
+        newTask[index].completed = true;
+        return newTask
+    })
+}
+
+
 function pendingToDos(){
     let ct=0;
     tasks.forEach((task)=>{
@@ -25,17 +42,20 @@ function pendingToDos(){
         }
     }
     )
-    console.log(ct)
     return ct
 }
 
 
 
     return(
-       <>
+       <div className="todo-container">
+        <div className="to-do-create-container">
        <CreateTask addTask={addTask}  />
+       </div>
+       <div className="task-container">
        <h3>Pending Todos {pendingToDos()}</h3>
-       {tasks.map((task , index) => <Task  {...task} />)}
-       </>
+       {tasks.map((task , index) => <Task  {...task} index={index} removeTask={removeTask} updateTask={updateTask} />)}
+       </div>
+       </div>
     )
 }
