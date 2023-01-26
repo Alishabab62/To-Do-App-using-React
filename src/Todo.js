@@ -4,16 +4,24 @@ import Task from "./task";
 
 
 export default function Todo(){
+let [tasks ,setTasks] = React.useState(JSON.parse(localStorage.getItem('tasks')) || []);
+let [filter , setFilter] = React.useState(tasks);
+let [count, setCount] = React.useState(0)
 
-let [tasks ,setTasks] = React.useState([]);
+function set(){
+    setCount(count++)
+}
+
 
     function addTask(task){
+        console.log("add to do")
         setTasks((tasks) => {
             return [
                 ...tasks,
                 task
             ]
         })
+        
     };
 
 
@@ -33,8 +41,8 @@ function updateTask(index){
     })
 }
 
-
-function pendingToDos(){
+let pendingToDos = React.useCallback(()=>{
+    console.log("PEnding")
     let ct=0;
     tasks.forEach((task)=>{
         if(!task.markCompleted){
@@ -42,19 +50,55 @@ function pendingToDos(){
         }
     }
     )
-    return ct
-}
+    return ct;
+},[tasks])
+
 
 React.useEffect(()=>{
+    console.log(tasks)
     localStorage.setItem("tasks" , JSON.stringify(tasks));
+    setFilter([...tasks])
 },[tasks]);
 
+function filterTaskCompleted(){
+    let completedTask=[];
+    tasks.forEach((task)=>{
+        console.log(task)
+        if(task.markCompleted){
+            completedTask.push(task)
+        }
+    })
+    setFilter(() =>completedTask)
+}
 
-React.useEffect(() => {
-    let t = localStorage.getItem('tasks');
-    t = JSON.parse(t);
-    setTasks(() => t);
-}, []);
+function filterTaskNotCompleted(){
+    let notCompletedTask=[];
+    tasks.forEach((task)=>{
+        console.log(task)
+        if(!task.markCompleted){
+            notCompletedTask.push(task)
+        }
+    })
+    setFilter(() =>notCompletedTask)
+}
+
+function filterReset(){
+    setFilter(() =>tasks)
+}
+
+
+
+let filterBtnStyle={
+    height:"100%",
+    backgroundColor:"aquamarine",
+    fontWeight:"bold",
+    margin:"0px 25px",
+    border:"none",
+    borderRadius:"5px",
+    padding:"5px 10px",
+    cursor:"pointer"
+}
+
 
 
     return(
@@ -63,8 +107,14 @@ React.useEffect(() => {
        <CreateTask addTask={addTask}  />
        </div>
        <div className="task-container" style={{width:"80%"}}>
+        <div style={{display:"flex" , height:"40px" , alignItems:"center" , marginTop:"25px"}}>
        <h3 style={{margin:"20px 0px" , fontSize:"25px" }}>Pending Todos {pendingToDos()}</h3>
-       {tasks.map((task , index) => <Task  {...task} index={index} removeTask={removeTask} updateTask={updateTask} />)}
+       <button style={filterBtnStyle} onClick={filterTaskCompleted}>Complete Task</button>
+       <button style={filterBtnStyle} onClick={filterTaskNotCompleted} >Not Complete Task</button>
+       <button style={filterBtnStyle} onClick={filterReset}>Reset Filter</button>
+       <button onClick={set} style={filterBtnStyle}>{count}</button>
+       </div>
+       {filter.map((task , index) => <Task  {...task} index={index}  removeTask={removeTask} updateTask={updateTask} />)}
        </div>
        </div>
     )
