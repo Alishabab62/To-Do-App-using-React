@@ -11,17 +11,27 @@ export default function CreateTask(props) {
       });
       setValue("");
     }
+    else{
+      let errorMsg=document.querySelector('.error-message');
+     errorMsg.style.display="block";
+      setTimeout(()=>{
+     errorMsg.style.display="none";
+      },1000)
+    }
   }
 
   function mouseIn(event) {
     event.target.style.backgroundColor = "white";
-    event.target.style.border = "5px solid aquamarine";
+    event.target.style.color = "black";
+    event.target.style.border = "2px solid #8884FF";
   }
 
   function mouseOut(event) {
-    event.target.style.backgroundColor = "aquamarine";
+    event.target.style.backgroundColor = "#D64550";
+    event.target.style.color = "white";
   }
   return (
+    <>
     <form
       onSubmit={handleSubmit}
       style={{
@@ -50,14 +60,17 @@ export default function CreateTask(props) {
           width: "20%",
           height: "100%",
           borderRadius: "5px",
-          border: "none",
+          border: "2px solid #8884FF",
           fontWeight: "bold",
-          backgroundColor: "aquamarine",
-          cursor:"pointer"
+          backgroundColor: "#D64550",
+          cursor:"pointer",
+          color:"white"
         }}
       >
         Add ToDo
       </button>
     </form>
+    <div className="error-message" style={{color:"red" , marginTop:"20px" , display:"none"}}>Field can't be empty</div>
+    </>
   );
 }

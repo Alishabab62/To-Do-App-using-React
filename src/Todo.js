@@ -6,12 +6,6 @@ import Task from "./task";
 export default function Todo(){
 let [tasks ,setTasks] = React.useState(JSON.parse(localStorage.getItem('tasks')) || []);
 let [filter , setFilter] = React.useState(tasks);
-let [count, setCount] = React.useState(0)
-
-function set(){
-    setCount(count++)
-}
-
 
     function addTask(task){
         console.log("add to do")
@@ -20,8 +14,7 @@ function set(){
                 ...tasks,
                 task
             ]
-        })
-        
+        }) 
     };
 
 
@@ -42,7 +35,6 @@ function updateTask(index){
 }
 
 let pendingToDos = React.useCallback(()=>{
-    console.log("PEnding")
     let ct=0;
     tasks.forEach((task)=>{
         if(!task.markCompleted){
@@ -90,13 +82,14 @@ function filterReset(){
 
 let filterBtnStyle={
     height:"100%",
-    backgroundColor:"aquamarine",
+    backgroundColor:"#D64550",
     fontWeight:"bold",
     margin:"0px 25px",
-    border:"none",
+    border:"2px solid #8884FF",
     borderRadius:"5px",
     padding:"5px 10px",
-    cursor:"pointer"
+    cursor:"pointer",
+    color:"white"
 }
 
 
@@ -112,7 +105,6 @@ let filterBtnStyle={
        <button style={filterBtnStyle} onClick={filterTaskCompleted}>Complete Task</button>
        <button style={filterBtnStyle} onClick={filterTaskNotCompleted} >Not Complete Task</button>
        <button style={filterBtnStyle} onClick={filterReset}>Reset Filter</button>
-       <button onClick={set} style={filterBtnStyle}>{count}</button>
        </div>
        {filter.map((task , index) => <Task  {...task} index={index}  removeTask={removeTask} updateTask={updateTask} />)}
        </div>
